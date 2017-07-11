@@ -1,0 +1,5 @@
+A java 8 way to create thread
+Runnable taskRegister = () -> { 	
+				//do your code here or call a function
+};
+new Thread(taskRegister).start();
