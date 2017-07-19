@@ -1,0 +1,90 @@
+4 example to Iterate over HashMap, Hashtable or any Map in Java
+
+Example of hashmap : 
+HashMap<String, String> loans = new HashMap<String, String>();
+loans.put<"home loan", "Citibank");
+loans.put<"personal loan", "Wells Fargo");
+
+1) Iterating or looping map using Java 5 foreach loop
+
+Here we will use new foreach loop introduced in JDK5 for iterating over any map in java and using KeySet of the map for getting keys. this will iterate through all values of Map and display key and value together.
+
+HashMap<String, String> loans = new HashMap<String, String>();
+loans.put("home loan", "citibank");
+loans.put("personal loan", "Wells Fargo");
+
+for (String key : loans.keySet()) {
+   System.out.println("------------------------------------------------");
+   System.out.println("Iterating or looping map using java5 foreach loop");
+   System.out.println("key: " + key + " value: " + loans.get(key));
+}
+
+Output:
+------------------------------------------------
+Iterating or looping map using java5 foreach loop
+key: home loan value: Citibank
+------------------------------------------------
+Iterating or looping map using java5 foreach loop
+key: personal loan value: Wells Fargo
+
+2) Iterating Map in Java using KeySet Iterator
+
+In this Example of looping hashmap in Java we have used Java Iterator instead of for loop, rest are similar to earlier example of looping:
+
+Set<String> keySet = loans.keySet();
+Iterator<String> keySetIterator = keySet.iterator();
+while (keySetIterator.hasNext()) {
+   System.out.println("------------------------------------------------");
+   System.out.println("Iterating Map in Java using KeySet Iterator");
+   String key = keySetIterator.next();
+   System.out.println("key: " + key + " value: " + loans.get(key));
+}
+
+Output:
+------------------------------------------------
+Iterating Map in Java using KeySet Iterator
+key: home loan value: Citibank
+------------------------------------------------
+Iterating Map in Java using KeySet Iterator
+key: personal loan value: Wells Fargo
+
+3) Looping HashMap in Java using EntrySet and Java 5 for loop
+
+In this Example of traversing Map in Java, we have used EntrySet instead of KeySet. EntrySet is a collection of all Map Entries and contains both Key and Value.
+
+Set<Map.Entry<String, String>> entrySet = loans.entrySet();
+for (Entry entry : entrySet) {
+   System.out.println("------------------------------------------------");
+   System.out.println("looping HashMap in Java using EntrySet and java5 for loop");
+   System.out.println("key: " + entry.getKey() + " value: " + entry.getValue());
+}
+
+Output:
+------------------------------------------------
+looping HashMap in Java using EntrySet and java5 for loop
+key: home loan value: Citibank
+------------------------------------------------
+looping HashMap in Java using EntrySet and java5 for loop
+key: personal loan value: Wells Fargo
+
+
+4) Iterating HashMap in Java using EntrySet and Java iterator
+
+This is the fourth and last example of looping Map and here we have used Combination of Iterator and EntrySet to display all keys and values of a Java Map.
+
+Set<Map.Entry<String, String>> entrySet1 = loans.entrySet();
+Iterator<Entry<String, String>> entrySetIterator = entrySet1.iterator();
+while (entrySetIterator.hasNext()) {
+   System.out.println("------------------------------------------------");
+   System.out.println("Iterating HashMap in Java using EntrySet and Java iterator");
+   Entry entry = entrySetIterator.next();
+   System.out.println("key: " + entry.getKey() + " value: " + entry.getValue());
+}
+
+Output:
+------------------------------------------------
+Iterating HashMap in Java using EntrySet and Java iterator
+key: home loan value: Citibank
+------------------------------------------------
+Iterating HashMap in Java using EntrySet and Java iterator
+key: personal loan value: Wells Fargo
