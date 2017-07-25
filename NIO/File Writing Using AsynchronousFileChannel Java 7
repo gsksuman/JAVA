@@ -1,0 +1,80 @@
+File Writing Using AsynchronousFileChannel Java 7
+
+Java introduced this new class java.nio.channels.AsynchronousFileChannel for reading, writing and manipulating file. It can perform read, write, and other file operations at a given position in file in asynchronous mode. Here is an AsynchronousFileChannel example of writing to a file using this ( AsynchronousFileChannel Java 7 ) class.
+
+Steps that we follow to write to a file are –
+
+Open a file using AsynchronousFileChannel
+This allows us to open a file in different modes from java.nio.file.StandardOpenOption class.  Mostly used modes are to read, write, create, and append. Few special purpose modes are create_new to create new file each time, delete on close to delete file when everything is done and we want to close, truncate existing to truncate all contents to a 0 length file etc.
+
+Define a CompletionHandler for file
+This handler is used to handle the two completion scenarios through completed and failed method callbacks. Completed method also populates result integer which is number of bytes written in this case. On failure we are keeping things simple, just printing the exception information.
+
+Write using AsynchronousFileChannel
+It writes the string to file using write method and handles result using the CompletionHandler instance.
+
+Here is code example to write a file using AsynchronousFileChannel.
+
+AsynchronousFileWriteExample.java
+package net.deepakgaikwad.javanio.examples;
+ 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.CompletionHandler;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+ 
+public class AsynchronousFileWriteExample {
+ 
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        Path file = null;
+        AsynchronousFileChannel asynchFileChannel = null;
+        String filePath= "D:\Deepak\WebSite\DeepakGaikwadNet\Resources\AsynchNIODataFile.txt";
+        try {
+            file = Paths.get(filePath);
+            asynchFileChannel = AsynchronousFileChannel.open(file,
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.CREATE);
+ 
+            CompletionHandler<Integer, Object> handler = new CompletionHandler<Integer, Object>() {
+                @Override
+                public void completed(Integer result, Object attachment) {
+                    System.out.println("Thread: "+ Thread.currentThread().getName()+" File Write Completed with Result:"
+                            + result);
+                }
+ 
+                @Override
+                public void failed(Throwable e, Object attachment) {
+                    System.err.println("File Write Failed Exception:");
+                    e.printStackTrace();
+                }
+            };
+            System.out.println("Thread: "+Thread.currentThread().getName()+" Before write call");
+            asynchFileChannel.write(ByteBuffer
+                    .wrap("I am writing using Asynchronous NIO.".getBytes()),
+                    0, "File Write", handler);
+            System.out.println("Thread: "+Thread.currentThread().getName()+" After write call");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                asynchFileChannel.close();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+    }
+ 
+}
+Log Analysis
+Thread: main Before write call
+Thread: main After write call
+Thread: Thread-4 File Write Completed with Result:36
+Just take a look at the print statement log. “main” thread executes the print statements, while to write the file program has spawn a new thread. AsynchronousFileChannel write method completes the file write operation parallel to the main method remaining statement execution.
+
+Last thing is the final number in log statement from CompletionHandler, result. It gives the number of bytes wrote.
