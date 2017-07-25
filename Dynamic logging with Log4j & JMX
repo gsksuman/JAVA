@@ -1,0 +1,93 @@
+Log4j is one of the widely used libraries in the java world. Unfortunately it is not very easy to configure dynamic logging with Log4j. If one wants to enable debugging without restarting the server, there are a couple of crude options: 
+
+Use the configureAndWatch API to enable the Configurator class to watch for the changes to log4j configuration file. This API takes a time interval parameter. A separate thread is spawn to check any changes to the Log4j property file at this configured interval. If the log4j file has been changed, the configuration will be re-loaded. In this approach, to enable/disable logging, change the log4j configuration file.
+
+If you are using Spring Framework, there is a wrappter classes to make this easier. org.springframework.util.Log4jConfigurer and org.springframework.web.util.Log4jConfigListener can be used to enable the log4j watch dog for different environments. 
+
+The downside of this approach is that the thread created to watch over the log4j configuration file will not get terminated even after the LogManager is shutdown. In short, even after the application is shutdown in a J2EE environment, the watch dog thread will keep running.
+
+Use the JMX support provided within the Log4j. There are two classes org.apache.log4j.jmx.LoggerDynamicMBean and org.apache.log4j.HierarchyDynamicMBean exposes Log4j over JMX. But the support is very rudimentary. It requires writing further wrappers to get the most out of these classes. For example, one still needs to write wrappers to add new loggers which are not defined in the startup configuration.
+None of these approaches are really good. So having a customized solution is still a better choice. One simple approach would be to write a simple MXBean to expose key aspects of the Log4j over JMX. In a typical scenario, one would want to turn logging on or off for certain loggers at runtime. To support this, a simple wrapper class can be very easily implemented. 
+
+A management bean interface
+
+public interface Log4jConfiguratorMXBean {
+    /**
+     * list of all the logger names and their levels
+     */
+    List<String> getLoggers();
+ 
+    /**
+     * Get the log level for a given logger
+     */
+    String getLogLevel(String logger);
+ 
+    /**
+     * Set the log level for a given logger
+     */
+    void setLogLevel(String logger, String level);
+}
+
+
+Implementation
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+ 
+public class Log4jConfigurator implements Log4jConfiguratorMXBean {
+    public List<String> getLoggers() {
+        List<String> list = new ArrayList<String>();
+        for (Enumeration e = LogManager.getCurrentLoggers();
+             e.hasMoreElements(); ) {
+ 
+            Logger log = (Logger) e.nextElement();
+            if (log.getLevel() != null) {
+                list.add(log.getName() + " = " + log.getLevel().toString());
+            }
+        }
+        return list;
+    }
+ 
+    public String getLogLevel(String logger) {
+        String level = "unavailable";
+ 
+        if (StringUtils.isNotBlank(logger)) {
+            Logger log = Logger.getLogger(logger);
+ 
+            if (log != null) {
+                level = log.getLevel().toString();
+            }
+        }
+        return level;
+    }
+    public void setLogLevel(String logger, String level) {
+        if (StringUtils.isNotBlank(logger)  &&  StringUtils.isNotBlank(level)) {
+            Logger log = Logger.getLogger(logger);
+ 
+            if (log != null) {
+                log.setLevel(Level.toLevel(level.toUpperCase()));
+            }
+        }
+    }
+ 
+}
+
+
+Register with MBean Server using Spring
+
+<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+  <property name="locateExistingServerIfPossible" value="true">
+</property></bean>
+ 
+<bean id="jmxExporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+  <property name="beans">
+    <map>
+      <entry key="myapp:type=logging,name=config" value-ref="logConfig"></entry>
+    </map>
+  </property>
+</bean>
+ 
+<bean id="logConfig" class="Log4jConfigurator"></bean>
+Now hooking up the server to JConsole or VisualVM will expose the log4j attributes and operations. If one wants to add a new logger simply use the operations tab to add a new logger and set the appropriate log level. For example, to turn on hibernate SQL logging, set the logger name to org.hibernate.SQL and level to DEBUG. 
