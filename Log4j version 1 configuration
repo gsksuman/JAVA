@@ -1,0 +1,51 @@
+Create a file with name log4j.properties in /src folder of your project with following content.
+Below settings are for HTTP Client.
+
+# Set root logger level to INFO and its only appender to FILE.
+#log4j.rootLogger=INFO,FILE
+
+# FILE is set to be a RollingFileAppender.
+#log4j.appender.FILE=org.apache.log4j.RollingFileAppender
+#log4j.appender.FILE.MaxFileSize=2048KB
+#log4j.appender.FILE.MaxBackupIndex=20
+#log4j.appender.FILE.file=${jboss.server.home.dir}/log/SDP-RAM-LOG.log
+# FILE uses PatternLayout.
+#log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+#log4j.appender.FILE.layout.ConversionPattern=[%d{MMM dd HH:mm:ss}] %-5p (%F:%L) - %m%n
+
+#log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+#log4j.appender.CONSOLE.layout=org. apache.log4j.PatternLayout
+#log4j.appender.CONSOLE.layout.ConversionPattern=[%d{MMM dd HH:mm:ss}] %-5p (%F:%L) - %m%n
+#log4j.category.com.traffix=INFO,CONSOLE,FILE
+#log4j.additivity.com.traffix=false
+#log4j.category.com.rancore=INFO,CONSOLE,FILE
+#log4j.additivity.com.rancore=false
+
+#Log Configuration for HTTP request
+log4j.appender.httpLog=org.apache.log4j.RollingFileAppender
+log4j.appender.httpLog.MaxFileSize=500KB
+log4j.appender.httpLog.MaxBackupIndex=20
+log4j.appender.httpLog.file=${jboss.server.home.dir}/log/HTTP/http.log
+log4j.appender.httpLog.layout=org.apache.log4j.PatternLayout
+log4j.appender.httpLog.layout.ConversionPattern=[%d{MMM dd HH:mm:ss}] %-5p (%F:%L) - %m%n
+log4j.logger.httpclient.wire.header=DEBUG,httpLog
+log4j.additivity.logger.httpclient.wire.header=false
+log4j.logger.org.apache.commons.httpclient=DEBUG,httpLog
+log4j.additivity.logger.httpclient.wire.header=false
+log4j.logger.httpclient.wire=DEBUG,httpLog
+log4j.additivity.logger.httpclient.wire=false
+
+
+Put this function on your project and call it from your project startup.
+public void setLog4j1PropertyConfiguration(){
+		try {
+			Properties prpts = new Properties();
+			ClassLoader classLoader = NCManagement.class.getClassLoader();
+			InputStream in = classLoader.getResourceAsStream("log4j.properties");
+			prpts.load(in);
+			in.close();
+			PropertyConfigurator.configure(prpts);
+		} catch (Exception ex) {
+			ex.printStackTrance();
+		}
+	}
