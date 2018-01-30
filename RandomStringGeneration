@@ -1,0 +1,21 @@
+public static String getRandomString() {
+		String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String lowerCase = "abcdefghijklmnopqrstuvwxyz";
+		String integers = "0123456789";
+		String specialChr = "~!@#$%^&*()";
+		StringBuffer rendStrVal = new StringBuffer();
+		java.util.Random rand = new java.util.Random();
+		for (int i = 0; i <= 2; i++) {
+			rendStrVal.append(upperCase.charAt(rand.nextInt(upperCase.length())));
+		}
+		for (int i = 0; i <= 2; i++) {
+			rendStrVal.append(lowerCase.charAt(rand.nextInt(lowerCase.length())));
+		}
+		for (int i = 0; i <= 1; i++) {
+			rendStrVal.append(integers.charAt(rand.nextInt(integers.length())));
+		}
+		for (int i = 0; i <= 1; i++) {
+			rendStrVal.append(specialChr.charAt(rand.nextInt(specialChr.length())));
+		}
+		return rendStrVal.toString();
+	}
