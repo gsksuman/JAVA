@@ -1,0 +1,56 @@
+1) Conver To GB
+
+public static String converToGB(String strSpace) {
+		String temp = strSpace;
+		try {
+			if (temp.equalsIgnoreCase("0") || temp.equalsIgnoreCase("-")) {
+				return "0G";
+			} else {
+				String value = null;
+				String space = String.valueOf(temp.charAt(temp.length() - 1));
+				if (space.equalsIgnoreCase("K")) {
+					value = temp.substring(0, temp.length() - 1);
+					temp = String.valueOf(Double.parseDouble(value) / (1024 * 1024)) + "G";
+				} else if (space.equalsIgnoreCase("M")) {
+					value = temp.substring(0, temp.length() - 1);
+					temp = String.valueOf(Double.parseDouble(value) / 1024) + "G";	
+				}
+				else if (space.equalsIgnoreCase("T")) {
+					value = temp.substring(0, temp.length() - 1);
+					temp = String.valueOf(Double.parseDouble(value) * 1024) + "G";
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return temp;
+	}
+  
+  2) conver To MB
+  
+  public static String converToMB(String strSpace) {
+		String temp = strSpace;
+		try {
+			if (temp.equalsIgnoreCase("0") || temp.equalsIgnoreCase("-")) {
+				return temp;
+			} else {
+				String value = null;
+				String space = String.valueOf(temp.charAt(temp.length() - 1));
+				if (space.equalsIgnoreCase("K")) {
+					value = temp.substring(0, temp.length() - 1);
+					temp = String.valueOf(Double.parseDouble(value) / (1024)) + "M";
+				}
+
+				else if (space.equalsIgnoreCase("G")) {
+					value = temp.substring(0, temp.length() - 1);
+					temp = String.valueOf(Double.parseDouble(value) * (1024)) + "M";
+				} else if (space.equalsIgnoreCase("T")) {
+					value = temp.substring(0, temp.length() - 1);
+					temp = String.valueOf(Double.parseDouble(value) * (1024 * 1024)) + "M";
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return temp;
+	}
