@@ -1,0 +1,35 @@
+1) Get Current Date And Time in dd-MM-yyyy-hh-mm-ss format
+
+  public static String getCurrentDateAndTime() {
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+		Calendar cal = Calendar.getInstance();
+		String dateStr = format.format(cal.getTime());
+		return dateStr;
+	}
+  
+2) Get Current today Date in dd-MM-yyyy format
+
+	public static String getTodayDate() {
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar cal = Calendar.getInstance();
+		String dateStr = format.format(cal.getTime());
+		return dateStr;
+	}
+
+3) Get Current today Date in yyyy-MM-dd format
+
+	public static String getDate() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		String dateStr = format.format(cal.getTime());
+		return dateStr;
+	}
+
+4) Get Current Yesterday Date in yyyy-MM-dd format
+
+	public static String getYesterdayDateString() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		String date = format.format(cal.getTime().getTime() - (10 * 60 * 1000));
+		return date;
+	}
