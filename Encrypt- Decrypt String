@@ -4,7 +4,7 @@ Jars
   
 1) Function to encrypt string
 
- public static String encryptString(String strToEncrypt) {
+    public static String encryptString(String strToEncrypt) {
 		try {
 			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 			final SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
@@ -17,4 +17,17 @@ Jars
 		return null;
 	}
  
- 
+2) Function to decrypt string
+
+     public static String decryptPasswordString(String strToDecrypt) {
+		try {
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+			final SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+			final String decryptedString = new String(cipher.doFinal(new BASE64Decoder().decodeBuffer(strToDecrypt)));
+			return decryptedString;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
