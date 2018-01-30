@@ -54,3 +54,31 @@ public static String converToGB(String strSpace) {
 		}
 		return temp;
 	}
+	
+3) bytes To Size (KB,MB,GB etc)
+	public static String bytesToSize(long bytesData) {
+		DecimalFormat df = new DecimalFormat("#.##");
+		float bytes = (float) bytesData;
+		float kilobyte = 1024;
+		float megabyte = kilobyte * 1024;
+		float gigabyte = megabyte * 1024;
+		float terabyte = gigabyte * 1024;
+
+		if ((bytes >= 0) && (bytes < kilobyte)) {
+			return Float.toString(bytes) + "B";
+		} else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+			return df.format(bytes / kilobyte) + "KB";
+
+		} else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+			return df.format(bytes / megabyte) + "MB";
+
+		} else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+			return df.format(bytes / gigabyte) + "GB";
+
+		} else if (bytes >= terabyte) {
+			return df.format(bytes / terabyte) + "TB";
+
+		} else {
+			return bytes + " B";
+		}
+	}
