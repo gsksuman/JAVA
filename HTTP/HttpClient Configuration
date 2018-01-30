@@ -1,0 +1,20 @@
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+
+public Class HttpClientSetting
+{
+  private HttpClient httpClient;
+  private MultiThreadedHttpConnectionManager httpConnectionMgr;
+  private String socketTimeout = "10000";
+  
+  HttpClientSetting(){
+      httpConnectionMgr = new MultiThreadedHttpConnectionManager();
+			httpConnectionMgr.getParams().setConnectionTimeout(Integer.valueOf(socketTimeout));
+			httpConnectionMgr.getParams().setSoTimeout(Integer.valueOf(socketTimeout));
+			httpClient = new HttpClient(httpConnectionMgr);
+			httpClient.getParams().setParameter("http.protocol.allow-circular-redirects", false);
+			httpClient.getParams().setParameter("http.protocol.max-redirects", 2);
+			httpClient.getParams().setParameter("http.protocol.reject-relative-redirec", true);
+  }
+}
