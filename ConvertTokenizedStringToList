@@ -1,0 +1,9 @@
+public static ArrayList<String> convertTokenizedStringToList(String tokenizedString, String token) {
+		String str = tokenizedString;
+		String[] strs = str.split(token);
+		ArrayList<String> strsList = new ArrayList<String>();
+		for (String s : strs) {
+			strsList.add(s);
+		}
+		return strsList;
+	}
