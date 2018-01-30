@@ -33,3 +33,14 @@
 		String date = format.format(cal.getTime().getTime() - (10 * 60 * 1000));
 		return date;
 	}
+5) Get Number Of Days In A Particular Month
+
+	public int getNumberOfDaysInAParticularMonth(String year, int month) {
+		Calendar calendar = Calendar.getInstance();
+		int years = Integer.parseInt(year);
+		int months = month; 
+		int date = 1;
+		calendar.set(years, months, date);
+		int numberOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		return numberOfDays;
+	}
