@@ -101,8 +101,8 @@ public class Log4JImpl {
 				Log4j2Parameters.ROOTLOGGER_APPENDERREF_CONSOLE_REF_VALUE);
 		
 		log4j2Properties.setProperty(
-				Log4j2Parameters.ROOTLOGGER_APPENDERREF_R_REF,
-				Log4j2Parameters.ROOTLOGGER_APPENDERREF_R_REF_VALUE);
+				Log4j2Parameters.ROOTLOGGER_APPENDERREF_FILE_REF,
+				Log4j2Parameters.ROOTLOGGER_APPENDERREF_FILE_REF_VALUE);
 	}
 
 	public String getMaxFileSize() {
