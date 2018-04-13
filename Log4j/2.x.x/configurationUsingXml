@@ -1,0 +1,46 @@
+log4j2 configuration step at application startup.
+
+1) Add log4j2 jars in build path
+2) log4j2.xml in src folder (in case of .xml based configuration)
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+       <Appenders>
+              <RollingFile name="RootRollingFile"
+                     fileName="../logs/log.log"
+                     filePattern="./log/$${date:yyyy-MM}/logs/log-%d{MM-dd-yyyy}-%i.log">
+                     <PatternLayout>
+                           <Pattern>[%d{MMM dd HH:mm:ss}] %-5p (%F:%L) - %m%n</Pattern>
+                     </PatternLayout>
+                     <Policies>
+                           <!--<TimeBasedTriggeringPolicy /> -->
+                           <SizeBasedTriggeringPolicy size="4096KB" />
+                     </Policies>
+                     <DefaultRolloverStrategy max="20" />
+              </RollingFile>
+              <Console name="Console" target="SYSTEM_OUT">
+           			 <PatternLayout pattern="[%d{MMM dd HH:mm:ss}] %-5p (%F:%L) - %m%n" />
+        	</Console>
+       </Appenders>
+       <Loggers>
+              <Root level="trace">
+                     <AppenderRef ref="Console" level="INFO"/>
+                     <AppenderRef ref="RootRollingFile" level="INFO" />
+              </Root>
+       </Loggers>
+</Configuration>
+
+3) Java code to initiatize log4j2 
+public void intitLog4j2Confi() {
+		ClassLoader classLoader = MainClass.class.getClassLoader();
+		LoggerContext context=null;
+		try (InputStream in = classLoader.getResourceAsStream("log4j2.xml")) {
+			ConfigurationSource source = new ConfigurationSource(in);
+			context=Configurator.initialize(null, source);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//finally{
+			//if(context!=null)
+				//context.close();
+		//}
+	}
