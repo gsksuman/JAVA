@@ -5,7 +5,7 @@ public interface Log4j2Config {
 	String PROPERTY_FILENAME="property.filename"; 
 	String PROPERTY_FILENAME_VALUE="../logs/log.log";
 	String APPENDERS ="appenders";
-	//String APPENDERS_VALUE = "CONSOLE";
+	String APPENDERS_VALUE = "CONSOLE";
 	String APPENDERS_VALUE = "FILE";
 	
 	//Console Appender
@@ -24,9 +24,9 @@ public interface Log4j2Config {
 	String APPENDER_FILE_NAME="appender.FILE.name";
 	String APPENDER_FILE_NAME_VALUE= "File";
 	String APPENDER_FILE_FILENAME="appender.FILE.fileName";
-	String APPENDER_FILE_FILENAME_VALUE="microService.log";
+	String APPENDER_FILE_FILENAME_VALUE="log.log";
 	String APPENDER_FILE_FILEPATTERN="appender.FILE.filePattern";
-	String APPENDER_FILE_FILEPATTERN_VALUE= "../logs/$${date:yyyy-MM}/microService-%d{MM-dd-yyyy_HH_mm}-%i.log";
+	String APPENDER_FILE_FILEPATTERN_VALUE= "../logs/$${date:yyyy-MM}/log-%d{MM-dd-yyyy_HH_mm}-%i.log";
 	String APPENDER_FILE_LAYOUT_TYPE="appender.FILE.layout.type"; 
 	String APPENDER_FILE_LAYOUT_TYPE_VALUE="PatternLayout";
 	String APPENDER_FILE_LAYOUT_PATTERN="appender.FILE.layout.pattern";
@@ -41,7 +41,7 @@ public interface Log4j2Config {
 	String APPENDER_FILE_POLICIES_SIZE_TYPE="appender.FILE.policies.size.type"; 
 	String APPENDER_FILE_POLICIES_SIZE_TYPE_VALUE="SizeBasedTriggeringPolicy";
 	String APPENDER_FILE_POLICIES_SIZE_SIZE="appender.FILE.policies.size.size";
-	String APPENDER_FILE_POLICIES_SIZE_SIZE_VALUE="4000 KB";
+	String APPENDER_FILE_POLICIES_SIZE_SIZE_VALUE="2000 KB";
 	String APPENDER_FILE_STRATEGY_TYPE="appender.FILE.strategy.type"; 
 	String APPENDER_FILE_STRATEGY_TYPE_VALUE="DefaultRolloverStrategy";
 	String APPENDER_FILE_STRATEGY_MAX="appender.FILE.strategy.max";
