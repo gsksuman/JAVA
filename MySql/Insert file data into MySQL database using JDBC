@@ -26,3 +26,5 @@ String sql = "INSERT INTO person (photo) values (?)";
 PreparedStatement statement = connection.prepareStatement(sql);
 statement.setBlob(1, inputStream);
 statement.executeUpdate();
+
+http://www.codejava.net/java-se/jdbc/read-file-data-from-database-using-jdbc
