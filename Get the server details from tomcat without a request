@@ -1,0 +1,36 @@
+1)
+
+Server server = ServerFactory.getServer();
+        Service[] services = server.findServices();
+        for (Service service : services) {
+            for (Connector connector : service.findConnectors()) {
+                ProtocolHandler protocolHandler = connector.getProtocolHandler();
+                if (protocolHandler instanceof Http11Protocol
+                    || protocolHandler instanceof Http11AprProtocol
+                    || protocolHandler instanceof Http11NioProtocol) {
+                    serverPort = connector.getPort();
+                    System.out.println("HTTP Port: " + connector.getPort());
+                }
+            }
+
+
+        }
+        
+2) 
+
+public void getIpAddressAndPort() 
+throws MalformedObjectNameException, NullPointerException,
+            UnknownHostException {
+
+        MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();
+
+        Set<ObjectName> objectNames = beanServer.queryNames(new ObjectName("*:type=Connector,*"),
+                Query.match(Query.attr("protocol"), Query.value("HTTP/1.1")));
+
+        String host = InetAddress.getLocalHost().getHostAddress();
+        String port = objectNames.iterator().next().getKeyProperty("port");
+
+        System.out.println("IP Address of System : "+host );
+        System.out.println("port of tomcat server : "+port);
+
+    }
