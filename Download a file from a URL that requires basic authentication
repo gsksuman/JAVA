@@ -1,0 +1,24 @@
+File file = new File("C:\\attachments\\filename.jpg");
+if(!file.exists())
+{
+    file.createNewFile();
+}
+FileOutputStream fileOutputStream = new FileOutputStream(file);
+CloseableHttpClient httpclient = HttpClients.custom()
+                .build();
+try {
+    String userCredentials = "username:password";
+    String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+    HttpGet httpget = new HttpGet(url);
+    httpget.setHeader("Authorization", basicAuth);
+    httpget.setHeader("Content-Type", "text/html");
+    CloseableHttpResponse response = httpclient.execute(httpget);
+        try {
+            fileOutputStream.write(EntityUtils.toByteArray(response.getEntity()));
+            fileOutputStream.close();
+        } finally {
+            response.close();
+        }
+    } finally {
+        httpclient.close();
+}
