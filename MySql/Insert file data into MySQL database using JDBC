@@ -1,0 +1,28 @@
+1) Table Structure
+CREATE TABLE `person` (
+  `person_id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `photo` mediumblob,
+  PRIMARY KEY (`person_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1
+
+We can notice that the column photo has type of mediumblob - which is one of four MySQL’s blob types:
+TINYBLOB: 255 bytes
+BLOB: 65,535 bytes (64 KB)
+MEDIUMBLOB: 16,777,215 bytes (16 MB)
+LONGBLOB: 4 GB
+
+2) Insert file using standard JDBC API (database independent)
+To store content of a file (binary data) into the table, we can use the following method defined by the interface java.sql.PreparedStatement:
+void setBlob(int parameterIndex, InputStream inputStream)
+
+And we have to supply an input stream of the file to be stored. For example:
+
+String filePath = "D:/Photos/Tom.jpg";
+InputStream inputStream = new FileInputStream(new File(filePath));
+ 
+String sql = "INSERT INTO person (photo) values (?)";
+PreparedStatement statement = connection.prepareStatement(sql);
+statement.setBlob(1, inputStream);
+statement.executeUpdate();
