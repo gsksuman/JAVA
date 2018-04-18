@@ -1,0 +1,75 @@
+1) Using java.util.Date
+
+ public void givenTwoDatesBeforeJava8_whenDifferentiating()
+  throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+    Date firstDate = sdf.parse("06/24/2017");
+    Date secondDate = sdf.parse("06/30/2017");
+ 
+    long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
+    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+}
+
+2) java.time – Since Java 8
+The LocalDate difference:
+
+public void givenTwoDatesInJava8_whenDifferentiating() {
+    LocalDate now = LocalDate.now();
+    LocalDate sixDaysBehind = now.minusDays(6);
+ 
+    Duration duration = Duration.between(now, sixDaysBehind);
+    long diff = Math.abs(duration.toDays());
+}
+
+The LocalDateTime case:
+public void givenTwoDateTimesInJava8_whenDifferentiating() {
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime sixMinutesBehind = now.minusMinutes(6);
+ 
+    Duration duration = Duration.between(now, sixMinutesBehind);
+    long diff = Math.abs(duration.toMinutes());
+}
+
+3) Jodatime library
+
+public void difference_between_two_dates_duration_Joda()
+ {
+     DateTime dateOfBirth = new DateTime(1988, 7, 4, 0, 0, GregorianChronology.getInstance());
+     DateTime currentDate = new DateTime();
+     Days diffInDays = Days.daysBetween(dateOfBirth, currentDate);
+     Hours diffInHours = Hours.hoursBetween(dateOfBirth, currentDate);
+     Minutes diffInMinutes = Minutes.minutesBetween(dateOfBirth, currentDate);
+     Seconds seconds = Seconds.secondsBetween(dateOfBirth, currentDate);
+ }
+ 
+ 4) java.time.Period
+ LocalDate endofCentury = LocalDate.of(2014, 01, 01);
+LocalDate now = LocalDate.now();
+ 
+Period diff = Period.between(endofCentury, now);
+ 
+System.out.printf("Difference is %d years, %d months and %d days old",
+                    diff.getYears(), diff.getMonths(), diff.getDays());
+                    
+ 5) java.time.temporal.ChronoUnit
+ public void difference_between_two_dates_java8()
+{
+     LocalDate dateOfBirth = LocalDate.of(1980, Month.JULY, 4);
+     LocalDate currentDate = LocalDate.now();
+     long diffInDays = ChronoUnit.DAYS.between(dateOfBirth, currentDate);
+     long diffInMonths = ChronoUnit.MONTHS.between(dateOfBirth, currentDate);
+     long diffInYears = ChronoUnit.YEARS.between(dateOfBirth, currentDate);
+}
+
+6) java.time.Duration
+
+public void difference_between_two_dates_duration()
+ {
+     LocalDateTime dateTime = LocalDateTime.of(1988, 7, 4, 0, 0);
+     LocalDateTime dateTime2 = LocalDateTime.now();
+    int diffInNano = java.time.Duration.between(dateTime, dateTime2).getNano();
+     long diffInSeconds = java.time.Duration.between(dateTime, dateTime2).getSeconds();
+     long diffInMilli = java.time.Duration.between(dateTime, dateTime2).toMillis();
+     long diffInMinutes = java.time.Duration.between(dateTime, dateTime2).toMinutes();
+     long diffInHours = java.time.Duration.between(dateTime, dateTime2).toHours();
+ }
