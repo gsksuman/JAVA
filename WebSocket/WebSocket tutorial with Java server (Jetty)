@@ -1,0 +1,105 @@
+WebSocket tutorial with Java server (Jetty) and JavaScript client
+
+WebSocket is a web technology providing full-duplex communications channels over a single TCP connection. 
+WebSocket is designed to be implemented in web browsers and web servers, but it can be used by any client or server application. 
+In this tutorial we will use a Java server and a JavaScript client.
+
+We start with the Java server. Start by downloading the Jetty distribution files, 
+at the time of writing the latest version was jetty-distribution-9.0.5.v20130815. 
+Unzip this file and copy the lib directory to a place where your Java application (which we will build in a moment) can find it. 
+Now create a Java project and start with the WebSocketTest class file:
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.websocket.server.WebSocketHandler;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+
+public class WebSocketTest {
+
+    public static void main(String[] args) throws Exception {
+        Server server = new Server(8080);
+        WebSocketHandler wsHandler = new WebSocketHandler() {
+            @Override
+            public void configure(WebSocketServletFactory factory) {
+                factory.register(MyWebSocketHandler.class);
+            }
+        };
+        server.setHandler(wsHandler);
+        server.start();
+        server.join();
+    }
+}
+
+Now create the MyWebSocketHandler class:
+
+import java.io.IOException;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+
+@WebSocket
+public class MyWebSocketHandler {
+
+    @OnWebSocketClose
+    public void onClose(int statusCode, String reason) {
+        System.out.println("Close: statusCode=" + statusCode + ", reason=" + reason);
+    }
+
+    @OnWebSocketError
+    public void onError(Throwable t) {
+        System.out.println("Error: " + t.getMessage());
+    }
+
+    @OnWebSocketConnect
+    public void onConnect(Session session) {
+        System.out.println("Connect: " + session.getRemoteAddress().getAddress());
+        try {
+            session.getRemote().sendString("Hello Webbrowser");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnWebSocketMessage
+    public void onMessage(String message) {
+        System.out.println("Message: " + message);
+    }
+}
+
+The server side of things is now done. The client is written in Javascript with some HTML to make it work. 
+The index.html file looks like this:
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>WebSocket test</h1>
+        <script src="index.js"></script>
+    </body>
+</html>
+
+And the referenced index.js looks like this:
+
+var ws = new WebSocket("ws://127.0.0.1:8080/");
+
+ws.onopen = function() {
+    alert("Opened!");
+    ws.send("Hello Server");
+};
+
+ws.onmessage = function (evt) {
+    alert("Message: " + evt.data);
+};
+
+ws.onclose = function() {
+    alert("Closed!");
+};
+
+ws.onerror = function(err) {
+    alert("Error: " + err);
+};
+
+Now startup the server side by running the main of the WebSocketTest class and startup the client by pointing your webbrowser to the index.html file. If your browser is new enough to support WebSocket, you should see that the client and the server connect with each other and that the server sends a message to the client and vice versa.
+
+https://jansipke.nl/websocket-tutorial-with-java-server-jetty-and-javascript-client/
