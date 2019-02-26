@@ -1,0 +1,52 @@
+We need to do following things in order to create callable thread and process the output of a thread.
+We are using thread pool for thream managemnt.
+
+1) Create a list to hold all output of an operation performed by thread.
+  List<Future<JSONObject>> taskList = new ArrayList<Future<JSONObject>>();
+
+2) Perform operation by getting one thread from Thread pool and perform ThreadCallableJob by submitting it.
+
+  Future<JSONObject> jobOperationOutputlist=[SingletonClassName].getInstance()
+										.getThreadPoolExecutor()
+										.submit(new ThreadCallableJob());
+  //Hear we are adding output in our taskList                  
+  taskList.add(jobOperationOutputlist);
+  
+ 3) We can iterate taskList to see the output of a thread task
+ 
+  JSONObject jobOperationOutputObj=new JSONObject();
+  for(int taskCount=0;taskCount<taskList.size();taskCount++)
+	{
+		try{
+					jobOperationOutputObj = taskList.get(taskCount).get();
+			}catch (Exception e){
+					e.printStackTrace();
+			} 
+  }
+ 
+ 4) Create ThreadCallableJob class for operations
+ 
+ import java.util.concurrent.Callable;
+ import org.json.JSONObject;
+ 
+ public class ThreadCallableJob implements Callable<JSONObject> {
+	public ThreadCallableJob() {
+		super();
+	}
+	
+	@Override
+	public JSONObject call() throws Exception {
+		JSONObject jobOperationOutputObj = null;
+		switch(operation){
+		  case operation1:
+			  jobOperationOutputObj = doOperation1();					
+			break;
+		  case operation2:
+        jobOperationOutputObj = doOperation2();					
+			  break;
+		  default:
+			break;
+		 }
+		  return jobOperationOutputObj;
+	  }
+  }
