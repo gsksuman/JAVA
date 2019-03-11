@@ -1,0 +1,7 @@
+String filePath = "C:/Users/sumansingh.kanwer/Desktop/configuration.json";
+		
+InputStream is=new FileInputStream(filePath);
+JSONTokener tokener = new JSONTokener(is);
+JSONObject object = new JSONObject(tokener);
+System.out.println("ip value :"+object.getString("ip"));
+System.out.println("ip value :"+object.getString("port"));
