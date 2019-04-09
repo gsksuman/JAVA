@@ -1,0 +1,18 @@
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+public class JsonExample{
+public static void main(String[] args) throws JSONException, IOException {
+		String filePath = "config.json";
+		
+		InputStream is=new FileInputStream(filePath);
+		JSONTokener tokener = new JSONTokener(is);
+        JSONObject object = new JSONObject(tokener);
+        object.getJSONObject("appConfiguration").put("ip", "ip");
+        try (FileWriter file = new FileWriter(filePath)) {
+			file.write(object.toString());
+			System.out.println("Successfully Copied JSON Object to File...");
+			System.out.println("\nJSON Object: " + object);
+		}
+	}
+  }
